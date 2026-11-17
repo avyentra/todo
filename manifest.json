@@ -1,0 +1,14 @@
+{
+  "name": "To Do List",
+  "short_name": "To Do",
+  "description": "Tasks, lists, reminders and notes in one place.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1463C4",
+  "theme_color": "#1463C4",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
