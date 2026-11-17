@@ -252,6 +252,7 @@ textarea{resize:vertical;line-height:1.45}
 .wbtns{margin-top:auto;display:flex;flex-direction:column;gap:10px}
 .wbtns .btn{justify-content:center;padding:14px;font-size:16px;border-radius:16px;border:0}
 .wbtns .btn.white{background:#fff;color:#3B2BC8}
+.ioshint{margin:0;font-size:13.5px;opacity:.9;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
 .wbtns .btn.outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
 .auth-top{position:relative}
 .auth-back{position:absolute;left:8px;top:calc(8px + var(--st));color:#fff}

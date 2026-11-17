@@ -115,7 +115,7 @@
 <script src="js/events.js"></script>
 <script src="js/main.js"></script>
 <script>
-  // Offline support when hosted on a normal website (ignored inside Claude)
+  // Offline support and install as an app when hosted on a website (ignored inside Claude)
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
   }

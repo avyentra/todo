@@ -24,7 +24,7 @@ function setSess(remember) {
 function clearSess() { try { sessionStorage.removeItem(SESS); } catch (e) {} try { localStorage.removeItem(SESS); } catch (e) {} UI.unlocked = false; }
 function sessOk() {
   if (!S.profile) return false;
-  if (UI.unlocked) return true;
+  if (UI.unlocked || S.profile.rememberLogin) return true;
   const ss = getSess();
   return !!(ss && ss.u === String(S.profile.createdAt) && ss.k === S.profile.hash.slice(0, 16));
 }
@@ -55,6 +55,7 @@ function renderAuth() {
         <li><span class="fi">${ic('note')}</span><span><b>Lists, notes &amp; photos</b><small>Shopping lists, checklists and places</small></span></li>
       </ul>
       <div class="wbtns">
+        ${installHTML(true)}
         <button class="btn white" data-act="authgo" data-to="signup">Create account</button>
         <button class="btn outline" data-act="authgo" data-to="login">I already have an account</button>
       </div></div>`;
@@ -92,7 +93,7 @@ function renderAuth() {
       <form class="auth-card" id="loginForm" autocomplete="on" novalidate>
         <div class="who"><div class="avatar" style="--ac:${esc(pf.color)}">${esc(initials(pf.name))}</div><div><b>${esc(pf.name)}</b><small>${esc(pf.email || 'My account')}</small></div></div>
         ${pwField('liPw', 'Password', 'current-password', 'Your password')}
-        <label class="remember"><input type="checkbox" id="liRemember" checked> Keep me logged in on this device</label>
+        <label class="remember"><input type="checkbox" id="liRemember" checked> Keep me logged in</label>
         <p class="err" id="authErr" role="alert"></p>
         <button class="btn primary" type="submit">Log in</button>
         <div style="text-align:center"><button type="button" class="linkbtn" data-act="authgo" data-to="reset">Forgot password?</button></div>
@@ -125,7 +126,7 @@ async function doSignup() {
   if (pw.length < 6) return authErr('Password needs at least 6 characters.');
   if (pw !== pw2) return authErr('The two passwords don’t match.');
   const { salt, hash } = await newProfilePw(pw);
-  S.profile = { name, email, salt, hash, color: COLORS[Math.floor(Math.random() * 6)], createdAt: Date.now() };
+  S.profile = { name, email, salt, hash, color: COLORS[Math.floor(Math.random() * 6)], createdAt: Date.now(), rememberLogin: true };
   setSess(true);
   clearTimeout(metaTimer); metaTimer = 0;
   persist('meta', { lists: S.lists, settings: S.settings, profile: S.profile });
@@ -138,7 +139,9 @@ async function doLogin() {
   if (!pw) return authErr('Enter your password.');
   const h = await hashPw(pw, pf.salt);
   if (h !== pf.hash) { $('#liPw').value = ''; return authErr('Wrong password. Try again.'); }
-  setSess($('#liRemember').checked);
+  const keep = $('#liRemember').checked;
+  setSess(keep);
+  if (keep !== !!pf.rememberLogin) { S.profile = { ...S.profile, rememberLogin: keep }; persist('meta', { lists: S.lists, settings: S.settings, profile: S.profile }); }
   UI.view = 'tasks'; UI.list = 'all'; UI.tab = 'today'; UI.headKey = ''; setHash();
   render(); toast(`Welcome back, ${pf.name.split(' ')[0]}!`);
   setTimeout(daySummaryCheck, 900);
@@ -148,12 +151,16 @@ async function doReset() {
   if (pw.length < 6) return authErr('Password needs at least 6 characters.');
   if (pw !== pw2) return authErr('The two passwords don’t match.');
   const { salt, hash } = await newProfilePw(pw);
-  S.profile = { ...S.profile, salt, hash };
+  S.profile = { ...S.profile, salt, hash, rememberLogin: true };
   UI.authScreen = 'welcome'; setSess(true); UI.authMode = 'x';
   persist('meta', { lists: S.lists, settings: S.settings, profile: S.profile });
   render(); toast('Password changed. You’re logged in.');
 }
-function logout() { clearSess(); UI.authScreen = 'welcome'; UI.authMode = 'x'; render(); }
+function logout() {
+  clearSess();
+  if (S.profile && S.profile.rememberLogin) { S.profile = { ...S.profile, rememberLogin: false }; persist('meta', { lists: S.lists, settings: S.settings, profile: S.profile }); }
+  UI.authScreen = 'welcome'; UI.authMode = 'x'; render();
+}
 function openProfileEditor() {
   const pf = S.profile;
   openDlg(`<form class="sheet" id="profileForm" autocomplete="off"><div class="sheet-head"><button type="button" class="iconbtn" data-act="dlgclose" aria-label="Back">${ic('back')}</button><h2>Edit profile</h2></div>
@@ -173,4 +180,24 @@ function openPwChange() {
       <div class="fld"><label for="cpNew2">Confirm new password</label><input id="cpNew2" class="inp" type="password" autocomplete="new-password"></div>
       <p class="err" id="pfErr"></p></div>
     <div class="sheet-foot"><button type="button" class="btn ghost" data-act="dlgclose">Cancel</button><button type="submit" class="btn primary">Change password</button></div></form>`);
+}
+
+/* ---- install as an app (home screen icon) ---- */
+let installEvt = null;
+const isStandalone = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } };
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const inClaude = () => !!(window.claude && typeof window.claude.use === 'function');
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; UI.headKey = ''; UI.authMode = 'x'; render(); });
+window.addEventListener('appinstalled', () => { installEvt = null; UI.headKey = ''; UI.authMode = 'x'; render(); toast('App installed. Open it from your home screen.'); });
+async function installApp() {
+  if (!installEvt) return;
+  installEvt.prompt();
+  try { await installEvt.userChoice; } catch (e) {}
+  installEvt = null; UI.headKey = ''; UI.authMode = 'x'; render();
+}
+function installHTML(onDark) {
+  if (isStandalone()) return '';
+  if (installEvt) return `<button class="btn ${onDark ? 'outline' : 'sm primary'}" data-act="installapp">${ic('download', 'sm')} Install app on this phone</button>`;
+  if (isIOS && !inClaude()) return `<p class="${onDark ? 'ioshint' : 'hint'}">To add the app to your home screen: tap ${ic('upload', 'sm')} Share in Safari, then <b>Add to Home Screen</b>.</p>`;
+  return '';
 }

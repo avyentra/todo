@@ -32,6 +32,7 @@ document.addEventListener('click', async e => {
       const nx = order[(i + 1) % order.length];
       setSetting('sort', nx[0]); toast('Sorted by ' + nx[1]); break; }
     case 'peek': { const f = document.getElementById(a.dataset.for); if (!f) break; const show = f.type === 'password'; f.type = show ? 'text' : 'password'; a.innerHTML = ic(show ? 'eyeoff' : 'eye'); a.setAttribute('aria-label', show ? 'Hide password' : 'Show password'); break; }
+    case 'installapp': installApp(); break;
     case 'authgo': UI.authScreen = a.dataset.to; render(); break;
     case 'logout': if (await confirmBox('Log out?', 'Your tasks stay saved. You\u2019ll need your password to log back in.', 'Log out', false)) logout(); break;
     case 'editprofile': openProfileEditor(); break;
@@ -170,6 +171,7 @@ document.addEventListener('change', async e => {
   if (t.id === 'fBatchToggle') { UI.edit.batch = t.checked; $('#fSingle').hidden = t.checked; $('#fMulti').hidden = !t.checked; $('#fTitleLbl').textContent = t.checked ? 'Add many items at once' : 'What is to be done?'; $('#fTitleLbl').setAttribute('for', t.checked ? 'fBatch' : 'fTitle'); (t.checked ? $('#fBatch') : $('#fTitle')).focus(); if (t.checked && $('#fTitle').value.trim()) $('#fBatch').value = $('#fTitle').value.trim() + '\n'; }
   else if (t.id === 'setSound') { setSetting('sound', t.value); playSound(t.value); }
   else if (t.id === 'setVib') setSetting('vibration', t.checked);
+  else if (t.id === 'setRemember' && S.profile) { S.profile = { ...S.profile, rememberLogin: t.checked }; UI.headKey = ''; saveMeta(); toast(t.checked ? 'You\u2019ll stay logged in.' : 'You\u2019ll be asked for your password next time.'); }
   else if (t.id === 'setSum') setSetting('daySummary', t.checked);
   else if (t.id === 'setSumTime') { setSetting('summaryTime', t.value || '08:00'); if (t.value > nowHM()) setSetting('lastSummary', ''); }
   else if (t.id === 'filePhoto') {

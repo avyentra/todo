@@ -3,11 +3,9 @@
 A mobile-style to-do app: tasks, lists, reminders, notes, calendar and progress, with sign up and log in.
 Plain HTML, CSS and JavaScript. No build step and no libraries.
 
-## Run it
+## Run it on your computer
 
-**Easiest:** double-click `index.html` to open it in a browser.
-
-**Recommended (enables offline mode and "Install app"):** serve the folder with any web server, for example:
+Double-click `index.html`, or serve the folder:
 
 ```bash
 cd todo-app
@@ -15,8 +13,32 @@ python3 -m http.server 8080
 # then open http://localhost:8080
 ```
 
-To put it online, upload the whole folder to any static host (GitHub Pages, Netlify, Vercel, Firebase Hosting).
-Over HTTPS, phones can use **Add to Home screen** to install it like an app.
+## Put it on your phone with a home screen icon
+
+A home screen icon needs the app on a website with **https**. Any free static host works. Two easy ways:
+
+**Netlify (no coding, about 2 minutes)**
+1. Unzip `todo-app.zip` on your computer.
+2. Go to https://app.netlify.com/drop and sign in (free).
+3. Drag the `todo-app` folder onto the page. Netlify gives you a link like `https://your-name.netlify.app`.
+
+**GitHub Pages**
+1. Create a new public repository on GitHub and upload everything inside `todo-app`.
+2. Repository **Settings → Pages →** Source: *Deploy from a branch*, Branch: `main`, folder `/ (root)`, then **Save**.
+3. After a minute your link is `https://<your-username>.github.io/<repo-name>/`.
+
+**Then on the phone**
+- **Android (Chrome):** open the link and tap **Install app on this phone** on the welcome screen,
+  or Chrome menu **⋮ → Install app / Add to Home screen**.
+- **iPhone (Safari):** open the link, tap **Share → Add to Home Screen**.
+
+The icon opens the app full screen without the browser bar, and it also works offline.
+
+## Staying logged in
+
+- Sign up once. **Keep me logged in** is on by default, so opening the app from the icon goes straight to Home.
+- Turn it off in **Settings → App → Stay logged in** if you want the password every time.
+- **Log out** turns it off until you log in again with the box ticked.
 
 ## Folder structure
 
@@ -62,7 +84,8 @@ todo-app/
 
 ## About the log in
 
-The account and password are kept on the device or in your private Claude data. The password is stored as a salted
+The account, password and "stay logged in" choice are saved with your data: in your private Claude data when used
+inside Claude, or in the phone's browser storage (the app asks the browser to keep it) when installed from a website. The password is stored as a salted
 SHA-256 hash, never as plain text. It works as a lock for the app, not as a server account system: there is no
 backend, so accounts don't move between browsers by themselves. For real multi-user accounts, connect a backend such as
 Firebase Auth or Supabase and replace the functions in `js/auth.js` and `js/sync.js`.

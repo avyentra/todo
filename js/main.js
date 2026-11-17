@@ -12,5 +12,6 @@ try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () =
   doRender();
   setInterval(checkReminders, 20000);
   setInterval(() => { if (!dlg.open && !document.activeElement.matches('input,textarea,select')) render(); }, 60000);
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {}
   setTimeout(connect, 0);
 })();

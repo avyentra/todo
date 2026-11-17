@@ -343,9 +343,13 @@ function prefsHTML() {
   return `
   ${S.profile ? `<section class="card set-card"><h3>Account</h3>
     <div class="set-row"><div class="avatar" style="--ac:${esc(S.profile.color)}">${esc(initials(S.profile.name))}</div><div class="txt"><b>${esc(S.profile.name)}</b><small>${esc(S.profile.email || 'No email added')}</small></div><button class="btn sm" data-act="editprofile">${ic('edit', 'sm')} Edit</button></div>
-    <div class="set-row"><span class="ic">${ic('lock')}</span><div class="txt"><b>Password</b><small>Needed every time you log in on a new session</small></div><button class="btn sm" data-act="changepw">Change</button></div>
+    <div class="set-row"><span class="ic">${ic('lock')}</span><div class="txt"><b>Password</b><small>Used when you log in</small></div><button class="btn sm" data-act="changepw">Change</button></div>
     <div class="set-row"><span class="ic">${ic('logout')}</span><div class="txt"><b>Log out</b><small>Your tasks stay saved</small></div><button class="btn sm danger" data-act="logout">Log out</button></div>
   </section>` : ''}
+  <section class="card set-card"><h3>App</h3>
+    <div class="set-row"><span class="ic">${ic('download')}</span><div class="txt"><b>Home screen icon</b><small>${isStandalone() ? 'Installed. You opened the app from its icon.' : installEvt ? 'Install it to open from an icon like any other app.' : isIOS && !inClaude() ? 'In Safari tap Share, then Add to Home Screen.' : inClaude() ? 'Inside Claude it opens from this page. To get a phone icon, put the downloaded app folder on a website (see its README), open it on your phone and tap Install.' : 'Open this page in Chrome on your phone, then use the menu and choose Install app or Add to Home screen.'}</small></div>${installEvt && !isStandalone() ? '<button class="btn sm primary" data-act="installapp">Install</button>' : ''}</div>
+    ${S.profile ? `<div class="set-row"><span class="ic">${ic('lock')}</span><div class="txt"><b>Stay logged in</b><small>Skip the password when you open the app</small></div><input type="checkbox" class="switch" id="setRemember" ${S.profile.rememberLogin ? 'checked' : ''} aria-label="Stay logged in"></div>` : ''}
+  </section>
   <section class="card set-card"><h3>General</h3>
     <div class="set-row"><span class="ic">${ic('sun')}</span><div class="txt"><b>Theme</b><small>System follows your device or Claude’s setting</small></div>${seg('theme', [['light', 'Light'], ['dark', 'Dark'], ['system', 'System']])}</div>
     <div class="set-row"><span class="ic">${ic('clock')}</span><div class="txt"><b>Time format</b><small>${s.timeFmt === '24' ? '18:00' : '6:00 PM'}</small></div>${seg('timeFmt', [['12', '12-hour'], ['24', '24-hour']])}</div>
