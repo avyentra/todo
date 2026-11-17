@@ -26,7 +26,11 @@ todo-app/
 ├── manifest.json       Install info (name, colors, icon) for Add to Home screen
 ├── sw.js               Service worker: caches files so the app opens offline
 ├── icons/
-│   └── icon.svg        App icon
+│   ├── logo.png        Logo used on Welcome, Login, Sign up and in the menu
+│   ├── favicon.png     Browser tab icon
+│   ├── icon-192.png    App icon (Add to Home screen)
+│   ├── icon-512.png    App icon, large
+│   └── icon-maskable-512.png  App icon with safe padding for Android
 ├── css/
 │   └── styles.css      All styles: light/dark theme, layout, components
 └── js/                 Loaded in this order (see index.html)

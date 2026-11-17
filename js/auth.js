@@ -43,11 +43,11 @@ function renderAuth() {
   if (dlg.open) closeDlg();
   $('#app').classList.remove('open');
   box.hidden = false;
-  const top = (title, sub, back = 'welcome') => `<div class="auth-top"><button type="button" class="iconbtn auth-back" data-act="authgo" data-to="${back}" aria-label="Back">${ic('back')}</button><div class="auth-logo">${ic('check')}</div><h1>${title}</h1><p>${sub}</p></div>`;
+  const top = (title, sub, back = 'welcome') => `<div class="auth-top"><button type="button" class="iconbtn auth-back" data-act="authgo" data-to="${back}" aria-label="Back">${ic('back')}</button><img class="auth-logo" src="icons/logo.png" alt="To Do List logo" width="96" height="96"><h1>${title}</h1><p>${sub}</p></div>`;
   const pwField = (id, label, auto, ph) => `<div class="fld"><label for="${id}">${label}</label><div class="pw"><input id="${id}" class="inp" type="password" autocomplete="${auto}" placeholder="${ph}" required><button type="button" class="iconbtn" data-act="peek" data-for="${id}" aria-label="Show password">${ic('eye')}</button></div></div>`;
   if (mode === 'welcome') {
     box.innerHTML = `<div class="welcome">
-      <div class="auth-logo">${ic('check')}</div>
+      <img class="auth-logo" src="icons/logo.png" alt="To Do List logo" width="96" height="96">
       <div><h1>To Do List</h1><p class="tag">Plan your day, tick it off and enjoy your free time.</p></div>
       <ul class="feats">
         <li><span class="fi">${ic('sun')}</span><span><b>Today at a glance</b><small>Overdue, today and upcoming in tabs</small></span></li>
@@ -59,7 +59,7 @@ function renderAuth() {
         <button class="btn outline" data-act="authgo" data-to="login">I already have an account</button>
       </div></div>`;
   } else if (mode === 'splash') {
-    box.innerHTML = `<div class="splash"><div class="auth-logo">${ic('check')}</div><span>Loading your tasks…</span></div>`;
+    box.innerHTML = `<div class="splash"><img class="auth-logo" src="icons/logo.png" alt="To Do List logo" width="96" height="96"><span>Loading your tasks…</span></div>`;
   } else if (mode === 'signup') {
     box.innerHTML = `${top('To Do List', 'Plan your day, tick it off, enjoy your free time.')}
       <form class="auth-card" id="signupForm" autocomplete="on" novalidate>

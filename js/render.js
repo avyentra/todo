@@ -29,7 +29,7 @@ function renderSide() {
   const it = (act, id, icon, name, n, on, extra = '') => `<button class="nav-item ${on ? 'on' : ''}" data-act="${act}" data-id="${esc(id)}">${icon}<span class="t">${esc(name)}</span>${extra}${n ? `<span class="badge num">${n}</span>` : ''}</button>`;
   const tv = UI.view === 'tasks';
   $('#side').innerHTML = `
-    <div class="brand">${S.profile ? `<div class="avatar big" style="--ac:${esc(S.profile.color)}">${esc(initials(S.profile.name))}</div><h1>${esc(S.profile.name)}</h1><small>${esc(S.profile.email || 'My account')}</small>` : `<div class="brand-logo">${ic('check')}</div><h1>To Do List</h1><small>Tasks, lists &amp; notes</small>`}</div>
+    <div class="brand">${S.profile ? `<div class="avatar big" style="--ac:${esc(S.profile.color)}">${esc(initials(S.profile.name))}</div><h1>${esc(S.profile.name)}</h1><small>${esc(S.profile.email || 'My account')}</small>` : `<img class="brand-logo" src="icons/logo.png" alt="" width="64" height="64"><h1>To Do List</h1><small>Tasks, lists &amp; notes</small>`}</div>
     <nav class="nav" aria-label="Views">
       ${it('list', 'all', ic('home'), 'All Lists', p.length, tv && UI.list === 'all', late ? `<span class="badge red num" title="Overdue">${late}</span>` : '')}
       ${it('list', 'today', ic('sun'), 'Today', todayN, false)}

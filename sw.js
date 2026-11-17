@@ -1,7 +1,7 @@
 /* To Do List – offline cache for the app shell */
-const CACHE = 'todo-app-v1';
+const CACHE = 'todo-app-v2';
 const FILES = [
-  './', './index.html', './manifest.json', './icons/icon.svg', './css/styles.css',
+  './', './index.html', './manifest.json', './icons/logo.png', './icons/favicon.png', './icons/icon-192.png', './icons/icon-512.png', './css/styles.css',
   ...['utils', 'state', 'storage', 'sync', 'actions', 'auth', 'quick-add', 'reminders', 'dictation', 'toasts', 'theme', 'derived', 'render', 'dialogs', 'backup', 'router', 'events', 'main'].map(f => `./js/${f}.js`)
 ];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
