@@ -65,7 +65,7 @@ function renderAuth() {
     box.innerHTML = `${top('To Do List', 'Plan your day, tick it off, enjoy your free time.')}
       <form class="auth-card" id="signupForm" autocomplete="on" novalidate>
         <h2>Create your account</h2><p class="lead">Takes 20 seconds. Your tasks stay private to you.</p>
-        ${S.profile ? `<p class="note">You already have an account as <b>${esc(S.profile.name)}</b>. A new account replaces that login, and your tasks stay. <button type="button" class="linkbtn" data-act="authgo" data-to="login">Log in instead</button></p>` : ''}
+        ${S.profile ? `<p class="infonote">You already have an account as <b>${esc(S.profile.name)}</b>. A new account replaces that login, and your tasks stay. <button type="button" class="linkbtn" data-act="authgo" data-to="login">Log in instead</button></p>` : ''}
         <div class="fld"><label for="suName">Your name</label><input id="suName" class="inp" autocomplete="name" placeholder="e.g. Rahul Sharma" maxlength="40" required></div>
         <div class="fld"><label for="suEmail">Email <span style="font-weight:500;color:var(--muted)">(optional)</span></label><input id="suEmail" class="inp" type="email" autocomplete="email" placeholder="you@example.com"></div>
         ${pwField('suPw', 'Password', 'new-password', 'At least 6 characters')}
@@ -194,6 +194,30 @@ async function installApp() {
   installEvt.prompt();
   try { await installEvt.userChoice; } catch (e) {}
   installEvt = null; UI.headKey = ''; UI.authMode = 'x'; render();
+}
+function installDismissed() { const d = LS.get('tdl-install-hide'); return d && Date.now() - d < 7 * 86400000; }
+function addAppBanner() {
+  if (inClaude() || isStandalone() || installDismissed()) return '';
+  const mobile = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent) || isIOS;
+  if (!installEvt && !mobile) return '';
+  return `<div class="addapp" role="region" aria-label="Install app"><img src="icons/logo.png" alt=""><span>Add the app to your phone</span><button class="addbtn" data-act="addapp">Add</button><button class="iconbtn" data-act="hideaddapp" aria-label="Not now">${ic('x', 'sm')}</button></div>`;
+}
+function openInstallHelp() {
+  const ios = isIOS;
+  const secure = location.protocol === 'https:';
+  openDlg(`<div class="sheet"><div class="sheet-head"><button type="button" class="iconbtn" data-act="dlgclose" aria-label="Back">${ic('back')}</button><h2>Add to your phone</h2></div>
+    <div class="sheet-body">
+      ${!secure ? `<p class="infonote">This page isn\u2019t on a secure (https) link, so your browser may only add a shortcut. Open the https link for the full app.</p>` : ''}
+      ${ios ? `<ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px;font-size:15px">
+        <li>Open this page in <b>Safari</b>.</li>
+        <li>Tap the <b>Share</b> button ${ic('upload', 'sm')} at the bottom.</li>
+        <li>Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li></ol>`
+      : `<ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px;font-size:15px">
+        <li>Open this page in <b>Chrome</b>.</li>
+        <li>Tap the menu <b>\u22EE</b> at the top right.</li>
+        <li>Tap <b>Install app</b> or <b>Add to Home screen</b>, then <b>Install</b>.</li></ol>`}
+      <p class="hint" style="margin:0">The app icon opens straight to your tasks, full screen.</p>
+    </div><div class="sheet-foot"><button class="btn primary" data-act="dlgclose">Got it</button></div></div>`);
 }
 function installHTML(onDark) {
   if (isStandalone()) return '';

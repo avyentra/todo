@@ -33,6 +33,20 @@ A home screen icon needs the app on a website with **https**. Any free static ho
 - **iPhone (Safari):** open the link, tap **Share → Add to Home Screen**.
 
 The icon opens the app full screen without the browser bar, and it also works offline.
+On phones, Home also shows an **Add the app to your phone** banner with an **Add** button (hide it with ✕ for 7 days).
+
+## GitHub Pages with your own domain (todo.primeznews.com)
+
+This folder is ready for GitHub Pages: `CNAME` holds the domain and `.nojekyll` makes GitHub serve every file as-is.
+
+1. Upload **everything inside this folder** (including `CNAME` and `.nojekyll`) to the root of the repository.
+2. At your domain's DNS provider add a **CNAME** record: name `todo`, value `<your-github-username>.github.io`.
+   If you use Cloudflare, set it to **DNS only** (grey cloud), not Proxied.
+3. Repository **Settings → Pages**: Custom domain `todo.primeznews.com` → **Save**. Wait until it shows
+   "DNS check successful". If the certificate seems stuck, remove the domain, save, and add it again.
+4. When the certificate is ready (a few minutes, up to 24 hours), tick **Enforce HTTPS**.
+
+Until step 4 is done, the browser shows a certificate warning, and the app can't work offline or be installed.
 
 ## Staying logged in
 

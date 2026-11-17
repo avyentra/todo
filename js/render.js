@@ -67,7 +67,7 @@ function renderHead() {
       <button class="iconbtn" data-act="sharelist" title="Copy list as text" aria-label="Copy list as text">${ic('copy')}</button>
       <button class="iconbtn" data-act="checkall" title="Mark all as done" aria-label="Mark all as done">${ic('checkall')}</button>
       <button class="iconbtn" data-act="editlist" title="Rename or recolor list" aria-label="Rename or recolor list">${ic('edit')}</button>
-      ${real.id !== 'default' ? `<button class="iconbtn danger" data-act="dellist" title="Delete list" aria-label="Delete list">${ic('trash')}</button>` : ''}</div>` : '<div id="heroSlot"></div>';
+      ${real.id !== 'default' ? `<button class="iconbtn danger" data-act="dellist" title="Delete list" aria-label="Delete list">${ic('trash')}</button>` : ''}</div>` : '<div id="heroSlot" style="display:flex;flex-direction:column;gap:12px"></div>';
     h.innerHTML = `${top}
       <form class="card quick" id="quickForm" autocomplete="off">
         <input id="quickInput" placeholder="Add a task, e.g. Call mom 6pm" aria-label="Quick add task. You can type dates like tomorrow 6pm, !high, #Work or every month.">
@@ -178,7 +178,7 @@ function tasksBody() {
   const all = Object.values(S.tasks);
   const td = today();
   const real = S.lists.find(l => l.id === UI.list);
-  const hs = $('#heroSlot'); if (hs) hs.innerHTML = heroHTML();
+  const hs = $('#heroSlot'); if (hs) hs.innerHTML = addAppBanner() + heroHTML();
   const slot = $('#tabSlot');
   let out = '';
   const samples = all.some(t => t.sample) || Object.values(S.notes).some(n => n.sample);
