@@ -195,12 +195,12 @@ async function installApp() {
   try { await installEvt.userChoice; } catch (e) {}
   installEvt = null; UI.headKey = ''; UI.authMode = 'x'; render();
 }
-function installDismissed() { const d = LS.get('tdl-install-hide'); return d && Date.now() - d < 7 * 86400000; }
-function addAppBanner() {
-  if (inClaude() || isStandalone() || installDismissed()) return '';
-  const mobile = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent) || isIOS;
-  if (!installEvt && !mobile) return '';
-  return `<div class="addapp" role="region" aria-label="Install app"><img src="icons/logo.png" alt=""><span>Add the app to your phone</span><button class="addbtn" data-act="addapp">Add</button><button class="iconbtn" data-act="hideaddapp" aria-label="Not now">${ic('x', 'sm')}</button></div>`;
+function installDismissed() { try { return sessionStorage.getItem('tdl-install-hide') === '1'; } catch (e) { return !!UI.installHidden; } }
+function renderAddApp() {
+  const bar = $('#addAppBar'); if (!bar) return;
+  const show = !inClaude() && !isStandalone() && !installDismissed() && !UI.authMode;
+  bar.hidden = !show;
+  $('#app').classList.toggle('has-addapp', show);
 }
 function openInstallHelp() {
   const ios = isIOS;

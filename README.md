@@ -33,7 +33,7 @@ A home screen icon needs the app on a website with **https**. Any free static ho
 - **iPhone (Safari):** open the link, tap **Share → Add to Home Screen**.
 
 The icon opens the app full screen without the browser bar, and it also works offline.
-On phones, Home also shows an **Add the app to your phone** banner with an **Add** button (hide it with ✕ for 7 days).
+The app shows an **Add the app to your phone** bar above the bottom menu with an **Add** button. ✕ hides it until the app is opened again.
 
 ## GitHub Pages with your own domain (todo.primeznews.com)
 

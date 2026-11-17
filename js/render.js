@@ -6,6 +6,7 @@ let rq = 0;
 function render() { if (rq) return; rq = requestAnimationFrame(() => { rq = 0; doRender(); }); }
 function doRender() {
   renderAuth();
+  renderAddApp();
   if (UI.list !== 'all' && !S.lists.find(l => l.id === UI.list)) { UI.list = 'all'; UI.headKey = ''; }
   applyTheme();
   renderSide();
@@ -178,7 +179,7 @@ function tasksBody() {
   const all = Object.values(S.tasks);
   const td = today();
   const real = S.lists.find(l => l.id === UI.list);
-  const hs = $('#heroSlot'); if (hs) hs.innerHTML = addAppBanner() + heroHTML();
+  const hs = $('#heroSlot'); if (hs) hs.innerHTML = heroHTML();
   const slot = $('#tabSlot');
   let out = '';
   const samples = all.some(t => t.sample) || Object.values(S.notes).some(n => n.sample);

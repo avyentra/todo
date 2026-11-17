@@ -1,5 +1,5 @@
 /* To Do List – offline cache for the app shell */
-const CACHE = 'todo-app-v4';
+const CACHE = 'todo-app-v5';
 const FILES = [
   './', './index.html', './manifest.json', './icons/logo.png', './icons/favicon.png', './icons/icon-192.png', './icons/icon-512.png', './css/styles.css',
   ...['utils', 'state', 'storage', 'sync', 'actions', 'auth', 'quick-add', 'reminders', 'dictation', 'toasts', 'theme', 'derived', 'render', 'dialogs', 'backup', 'router', 'events', 'main'].map(f => `./js/${f}.js`)

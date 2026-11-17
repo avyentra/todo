@@ -34,7 +34,7 @@ document.addEventListener('click', async e => {
     case 'peek': { const f = document.getElementById(a.dataset.for); if (!f) break; const show = f.type === 'password'; f.type = show ? 'text' : 'password'; a.innerHTML = ic(show ? 'eyeoff' : 'eye'); a.setAttribute('aria-label', show ? 'Hide password' : 'Show password'); break; }
     case 'installapp': installApp(); break;
     case 'addapp': if (installEvt) installApp(); else openInstallHelp(); break;
-    case 'hideaddapp': LS.set('tdl-install-hide', Date.now()); render(); break;
+    case 'hideaddapp': UI.installHidden = true; try { sessionStorage.setItem('tdl-install-hide', '1'); } catch (err) {} render(); break;
     case 'authgo': UI.authScreen = a.dataset.to; render(); break;
     case 'logout': if (await confirmBox('Log out?', 'Your tasks stay saved. You\u2019ll need your password to log back in.', 'Log out', false)) logout(); break;
     case 'editprofile': openProfileEditor(); break;
